@@ -7,8 +7,6 @@ TARGET := $(OUT_PATH)/$(PROJECT_NAME)
 #代码目录
 SRC := ./
 
-MyFlag := -fPIC
-
 #编译器
 LD := g++
 #编译器选项
@@ -24,7 +22,6 @@ CCFLAGS := -g
 #附加库
 LIB := 
 LIBDIR :=
-
 
 define walk
     $(wildcard $(1)) $(foreach e, $(wildcard $(1)/*), $(call walk, $(e)))
@@ -72,8 +69,3 @@ endef
 $(foreach n,$(SOURCES),\
 	$(eval $(call make-cmd-cc,$(n),\
 		$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)))
- 
-
--include $(DEPENDS)
-
-
