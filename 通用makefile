@@ -68,3 +68,4 @@ $(foreach n,$(SOURCES),\
 	$(eval $(call make-cmd-cc,$(n),\
 		$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)))
 
+-include $(DEPENDS)
