@@ -18,8 +18,8 @@ CC := g++
 #连接器选项 动态库选项:-shared
 CCFLAGS := -g
 #附加库 LIB:-l  LIBDIR:-L
-LIB := -lpthread
-LIBDIR := -L
+LIB := 
+LIBDIR := 
 
 define walk
     $(wildcard $(1)) $(foreach e, $(wildcard $(1)/*), $(call walk, $(e)))
