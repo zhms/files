@@ -28,7 +28,6 @@ endef
 ALLFILES = $(call walk, $(SRC))
 SOURCES := $(filter %.cpp, $(ALLFILES))
 SOURCES += $(filter %.c, $(ALLFILES))
-SOURCES += $(filter %.pb.cc, $(ALLFILES))
 
 OBJECTS := $(foreach n,$(SOURCES),$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)
 DEPENDS := $(addsuffix .d,$(OBJECTS))
