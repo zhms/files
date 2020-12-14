@@ -1,0 +1,79 @@
+#项目名称
+PROJECT_NAME := test
+#输出路径
+OUT_PATH := ./build
+#生成文件
+TARGET := $(OUT_PATH)/$(PROJECT_NAME)
+#代码目录
+SRC := ./
+
+MyFlag := -fPIC
+
+#编译器
+LD := g++
+#编译器选项
+ 动态库选项:-fPIC
+LDFLAGS := -std=c++11 -g
+#包含目录
+INC := -I./
+#连接器
+CC := g++
+#连接器选项
+ 动态库选项:-shared
+CCFLAGS := -g
+#附加库
+LIB := 
+LIBDIR :=
+
+
+define walk
+    $(wildcard $(1)) $(foreach e, $(wildcard $(1)/*), $(call walk, $(e)))
+endef
+
+ALLFILES = $(call walk, $(SRC))
+SOURCES := $(filter %.cpp, $(ALLFILES))
+SOURCES += $(filter %.c, $(ALLFILES))
+SOURCES += $(filter %.pb.cc, $(ALLFILES))
+
+OBJECTS := $(foreach n,$(SOURCES),$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)
+DEPENDS := $(addsuffix .d,$(OBJECTS))
+
+OBJECTS_PATH :=$(foreach n,$(OBJECTS),$(dir $(n)))
+
+.PHONY : begin_build build end_build clean
+all:begin_build build end_build
+
+rebuild:clean all
+
+clean:
+	@rm -rf $(TARGET)
+	@rm -rf $(OUT_PATH)/obj/$(PROJECT_NAME)
+
+
+begin_build: $(BINARY_PATH) $(OBJECT_PATH)
+	@echo ==== start $(PROJECT_NAME), $(shell date) ====
+	@mkdir -p $(OBJECTS_PATH)
+	@mkdir -p $(dir $(TARGET))
+
+end_build: ;@echo ==== done $(PROJECT_NAME), $(shell date) ====
+
+build: $(TARGET)
+
+$(TARGET) : $(OBJECTS)
+	$(info 链接: $@)
+	@$(CC) -o $@ $(OBJECTS) $(CCFLAGS) $(LIB) $(LIBDIR)
+
+define make-cmd-cc
+$2 : $1
+	$$(info 编译: $$<)
+	$@ @$$(LD) $$(LDFLAGS) $$(INC) -MMD -MT $$@ -MF $$@.d -c -o $$@ $$< 
+endef
+
+$(foreach n,$(SOURCES),\
+	$(eval $(call make-cmd-cc,$(n),\
+		$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)))
+ 
+
+-include $(DEPENDS)
+
+
