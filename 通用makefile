@@ -9,15 +9,13 @@ SRC := ./
 
 #编译器
 LD := g++
-#编译器选项
- 动态库选项:-fPIC
+#编译器选项 动态库选项:-fPIC
 LDFLAGS := -std=c++11 -g
 #包含目录
 INC := -I./
 #连接器
 CC := g++
-#连接器选项
- 动态库选项:-shared
+#连接器选项 动态库选项:-shared
 CCFLAGS := -g
 #附加库
 LIB := 
@@ -69,3 +67,4 @@ endef
 $(foreach n,$(SOURCES),\
 	$(eval $(call make-cmd-cc,$(n),\
 		$(OUT_PATH)/obj/$(PROJECT_NAME)/$(basename $(n)).o)))
+
